@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByVog - Menü</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* GENEL AYARLAR */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #e0e0e0; overflow-x: hidden; }
+
+        /* HEADER & HERO BÖLÜMÜ */
+        header { position: relative; width: 100%; height: 40vh; background: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1600') center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1; }
+        
+        .logo-img { position: relative; z-index: 2; width: 100%; max-width: 400px; height: auto; filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.8)); transition: all 0.3s ease; }
+
+        /* ANA İÇERİK */
+        main { max-width: 1200px; margin: -40px auto 40px; padding: 20px; position: relative; z-index: 3; }
+
+        /* 3 ANA KATEGORİ KUTUSU */
+        .main-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; transition: all 0.3s ease; }
+        .category-box { background: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); transition: transform 0.3s ease, border-color 0.3s ease; }
+        .category-box:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.3); }
+        .category-box img { width: 100%; height: 250px; object-fit: cover; opacity: 0.85; transition: opacity 0.3s ease; }
+        .category-box:hover img { opacity: 1; }
+        .category-box h2 { text-align: center; padding: 18px; font-size: 1.3rem; font-weight: 600; color: #ffffff; letter-spacing: 1px; }
+
+        /* DETAYLI MENÜ ALANI */
+        .menu-details { display: none; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 25px; padding: 10px 20px; background: #2a2a2a; border: 1px solid #444; border-radius: 8px; cursor: pointer; font-weight: 400; color: #e0e0e0; transition: all 0.3s ease; }
+        .back-btn:hover { background: #444; color: #fff; }
+
+        /* YENİ: MODERN İÇ İÇE AKORDİYON TASARIMI (Grid Animasyonu İle) */
+        .accordion-item { background: rgba(35, 35, 35, 0.8); border: 1px solid #3a3a3a; border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
+        .accordion-header { padding: 20px; font-size: 1.1rem; font-weight: 600; color: #ffffff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #222; transition: background 0.3s ease; }
+        .accordion-header:hover { background: #2a2a2a; }
+        
+        .accordion-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; background: #1a1a1a; }
+        .accordion-wrapper.open { grid-template-rows: 1fr; }
+        .accordion-inner { overflow: hidden; }
+
+        /* ALT BAŞLIK AKORDİYONU */
+        .sub-accordion-header { 
+            padding: 20px 20px 10px; 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            color: #aaaaaa; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            border-bottom: 2px solid #444; 
+            margin: 0 15px 5px; 
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        .sub-accordion-header:hover { color: #ffffff; }
+        .sub-accordion-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
+        .sub-accordion-wrapper.open { grid-template-rows: 1fr; }
+        .sub-accordion-inner { overflow: hidden; }
+
+        /* ÜRÜN IZGARA (GRID) DÜZENİ */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
+
+        /* KART TİPİ ÜRÜN LİSTELEME */
+        .product-item { display: flex; flex-direction: column; background: rgba(40, 40, 40, 0.4); border: 1px solid #333; border-radius: 12px; padding: 12px; align-items: center; text-align: center; transition: transform 0.3s ease, background 0.3s ease; }
+        .product-item:hover { transform: translateY(-4px); background: rgba(50, 50, 50, 0.6); border-color: #555; }
+        .product-img { width: 100%; height: 110px; border-radius: 8px; object-fit: cover; margin-bottom: 12px; }
+        .product-info { display: flex; flex-direction: column; flex-grow: 1; width: 100%; }
+        .product-name { font-weight: 600; font-size: 0.95rem; color: #ffffff; margin-bottom: 6px; }
+        .product-desc { font-size: 0.75rem; color: #999999; line-height: 1.4; font-weight: 300; margin-bottom: 12px; flex-grow: 1; }
+        .product-price { font-weight: 700; font-size: 1rem; color: #ffffff; background: #1a1a1a; padding: 6px 12px; border-radius: 6px; border: 1px solid #333; width: 100%; }
+        .no-image-box {
+            width: 100%;
+            height: 110px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: #1a1a1a;
+            border: 1px dashed #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #888;
+            font-style: italic;
+            padding: 10px;
+            line-height: 1.4;
+            transition: all 0.3s ease;
+        }
+        .product-item:hover .no-image-box {
+            border-color: #888;
+            color: #ccc;
+        }
+
+
+        /* FOOTER */
+        footer { background: #181818; border-top: 1px solid #333; padding: 50px 20px; margin-top: 60px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .contact-info h3 { font-size: 1.2rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; letter-spacing: 1px; }
+        .contact-info p { margin-bottom: 12px; color: #aaaaaa; line-height: 1.6; font-size: 0.95rem; }
+        .contact-info strong { color: #dddddd; }
+        .social-buttons { margin-top: 20px; display: flex; gap: 15px; }
+        .social-buttons a { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: #2a2a2a; color: #ffffff; text-decoration: none; border-radius: 50%; font-size: 1.3rem; transition: all 0.3s ease; border: 1px solid #444; }
+        .social-buttons a:hover { background: #444; transform: translateY(-3px); border-color: #666; }
+        .map-container iframe { width: 100%; height: 220px; border: none; border-radius: 10px; opacity: 0.85; transition: opacity 0.3s ease; }
+        .map-container iframe:hover { opacity: 1; }
+
+        /* BÜYÜK EKRAN (MASAÜSTÜ) UYUMU */
+        @media (min-width: 769px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        /* MOBİL UYUM */
+        @media (max-width: 768px) {
+            .logo-img { max-width: 260px; }
+            .main-categories { grid-template-columns: 1fr; }
+            .category-box img { height: 180px; }
+            .footer-content { grid-template-columns: 1fr; }
+            .product-name { font-size: 0.85rem; }
+            .product-desc { font-size: 0.7rem; }
+            .product-price { font-size: 0.9rem; padding: 5px 10px; }
+            .product-img { height: 90px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="images/vogue_logo.png" alt="Vogue Plus Logo" class="logo-img">
+    </header>
+
+    <main>
+        <div class="main-categories" id="mainCategories">
+            <div class="category-box" onclick="showCategory('yiyecekler')">
+                <img src="images/yiyecekler.jpg" alt="Yiyecekler">
+                <h2>Yiyecekler</h2>
+            </div>
+            <div class="category-box" onclick="showCategory('tatlilar')">
+                <img src="images/tatlilar.jpg" alt="Tatlılar">
+                <h2>Tatlılar</h2>
+            </div>
+            <div class="category-box" onclick="showCategory('icecekler')">
+                <img src="images/icecekler.jpg" alt="İçecekler">
+                <h2>İçecekler</h2>
+            </div>
+        </div>
+
+        <div class="menu-details" id="menuDetails">
+            <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Geri Dön</div>
+            <div id="dynamicContent"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>İletişim</h3>
+                <p><strong><i class="fas fa-phone-alt"></i> Telefon:</strong> 0530 675 57 98</p>
+                <p><strong><i class="fas fa-map-marker-alt"></i> Adres:</strong> İnönü, İstanbul Cd. no 50/A-B, 39759 Lüleburgaz/Kırklareli</p>
+                <div class="social-buttons">
+                    <a href="https://www.instagram.com/byvogkafe/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/VogueCoffee/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2978.8475240217983!2d27.3512399!3d41.405187!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b3336d35706ba7%3A0x6e788bc5f3333333!2s%C4%B0n%C3%B6n%C3%B6%2C%20%C4%B0stanbul%20Cd.%20No%3A50%2C%2039750%20L%C3%BCleburgaz%2FK%C4%B1rklareli!5e0!3m2!1str!2str!4v1690000000000!5m2!1str!2str" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuVerileri = {
+            
+            icecekler: [
+                {
+                    akordiyonBaslik: "Kahveler",
+                    altBolumler: [
+                        {
+                            baslik: "Sıcak Kahveler",
+                            urunler: [
+                                { isim: "Caffè Latte", aciklama: "Espresso, buharla ısıtılmış süt ve hafif süt köpüğü.", fiyat: "220 ₺", resim: "images/latte.avif" },
+                                { isim: "Americano", aciklama: "Sıcak su ile inceltilmiş yoğun espresso shot.", fiyat: "200 ₺", resim: "images/americano.avif" },
+                                { isim: "Cappucino", aciklama: "Espresso, buharla ısıtılmış süt ve hafif süt köpüğü.", fiyat: "220 ₺", resim: "images/capp.avif" },
+                                { isim: "Cafe Mocha", aciklama: "Espresso, sıcak çikolata ve buharla ısıtılmış süt.", fiyat: "230 ₺", resim: "images/mocha.avif" },
+                                { isim: "Macchiato", aciklama: "Espresso üzerine az miktarda süt köpüğü eklenmiş kahve.", fiyat: "220 ₺", resim: "images/macchiato.avif" },
+                                { isim: "Caramel Macchiato", aciklama: "Espresso, buharla ısıtılmış süt ve karamel şurubu ile tatlandırılmış kahve.", fiyat: "230 ₺", resim: "images/caramel_macc.avif" },
+                                { isim: "Flat White", aciklama: "Espresso ve ince bir süt köpüğü tabakası ile hazırlanmış kahve.", fiyat: "220 ₺", resim: "images/flat.avif" },
+                                { isim: "Aromalı Latte", aciklama: "Espresso, buharla ısıtılmış süt ve seçtiğiniz aromalı şurup ile hazırlanmış kahve.", fiyat: "230 ₺", resim: "" },
+                                { isim: "Cafe Miel", aciklama: "Espresso, buharla ısıtılmış süt ve bal ile tatlandırılmış kahve.", fiyat: "230 ₺", resim: "images/miel.avif" },
+                                { isim: "Espresso Con Panna", aciklama: "Espresso üzerine krema eklenmiş kahve.", fiyat: "230 ₺", resim: "images/con_panna.avif" },
+                                { isim: "Single Espresso", aciklama: "Sadece espresso shot.", fiyat: "180 ₺", resim: "images/single.avif" },
+                                { isim: "Double Espresso", aciklama: "İki kat espresso shot.", fiyat: "200 ₺", resim: "images/double.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Türk Kahveleri",
+                            urunler: [
+                                { isim: "Türk Kahvesi", aciklama: "", fiyat: "130 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Double Türk Kahvesi", aciklama: "", fiyat: "180 ₺", resim: "images/double_turk.avif" },
+                                { isim: "Sütlü Türk Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/sutlu_turk.avif" },
+                                { isim: "Damla Sakızlı Türk Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Fındık Aromalı Türk Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Dağ Çileği Aromalı Türk Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Karamel Aromalı Türk Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Menengiç Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/menengic.avif" },
+                                { isim: "Dibek Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Osmanlı Kahvesi", aciklama: "", fiyat: "140 ₺", resim: "images/turk_kahve.avif" },
+                                { isim: "Double Aromalı Türk Kahvesi", aciklama: "", fiyat: "200 ₺", resim: "images/double_turk.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Soğuk Kahveler",
+                            urunler: [
+                                { isim: "Iced Latte", aciklama: "Espresso, soğuk süt ve buz ile hazırlanmış kahve.", fiyat: "220 ₺", resim: "images/iced_latte.avif" },
+                                { isim: "Iced Americano", aciklama: "Soğuk su ile inceltilmiş yoğun espresso shot.", fiyat: "200 ₺", resim: "images/iced_americano.avif" },
+                                { isim: "Iced Mocha", aciklama: "Espresso, soğuk çikolata ve buz ile hazırlanmış kahve.", fiyat: "230 ₺", resim: "images/iced_mocha.avif" },
+                                { isim: "Iced White Chocolate Mocha", aciklama: "Espresso, soğuk beyaz çikolata ve buz ile hazırlanmış kahve.", fiyat: "230 ₺", resim: "images/iced_white_mocha.avif" },
+                                { isim: "Iced Caramel Macchiato", aciklama: "Espresso, soğuk süt ve karamel şurubu ile tatlandırılmış kahve.", fiyat: "230 ₺", resim: "images/iced_caramel_macc.avif" },
+                                { isim: "Affogato", aciklama: "Espresso üzerine dondurma eklenmiş kahve.", fiyat: "230 ₺", resim: "images/affogato.avif" },
+                                { isim: "Frappe Karamel", aciklama: "Espresso, soğuk süt ve karamel şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_karamel.avif" },
+                                { isim: "Frappe Çikolata", aciklama: "Espresso, soğuk süt ve çikolata şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_cikolata.avif" },
+                                { isim: "Frappe Vanilya", aciklama: "Espresso, soğuk süt ve vanilya şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_vanilla.avif" },
+                                { isim: "Frappe Çilek", aciklama: "Espresso, soğuk süt ve çilek şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_cilek.avif" },
+                                { isim: "Frappe Mango", aciklama: "Espresso, soğuk süt ve mango şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_mango.avif" },
+                                { isim: "Frappe Şeftali", aciklama: "Espresso, soğuk süt ve şeftali şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_seftali.avif" },
+                                { isim: "Frappe Hindistan Cevizi", aciklama: "Espresso, soğuk süt ve hindistan cevizi şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_coconut.avif" },
+                                { isim: "Frappe Fındık", aciklama: "Espresso, soğuk süt ve fındık şurubu ile tatlandırılmış kahve.", fiyat: "200 ₺", resim: "images/frappe_findik.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Filtre Kahveler",
+                            urunler: [
+                                { isim: "Klasik Filtre Kahve", aciklama: "Taze demlenmiş %100 Arabica çekirdekleri.", fiyat: "200 ₺", resim: "images/filtre.avif" },
+                                { isim: "Guetamala Filtre Kahve", aciklama: "Orta gövdeli, hafif çikolata ve fındık aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Ethiopia Filtre Kahve", aciklama: "Orta gövdeli, hafif meyvemsi ve çiçeksi aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Colombia Filtre Kahve", aciklama: "Orta gövdeli, hafif karamel ve fındık aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Santos Filtre Kahve", aciklama: "Orta gövdeli, hafif karamel ve fındık aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Damla Sakızlı Filtre Kahve", aciklama: "Orta gövdeli, hafif sakız aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Çikolata Aromalı Filtre Kahve", aciklama: "Orta gövdeli, hafif çikolata aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Karamel Aromalı Filtre Kahve", aciklama: "Orta gövdeli, hafif karamel aromalı filtre kahve.", fiyat: "220 ₺", resim: "images/filtre.avif" },
+                                { isim: "Hario V60 Filtre Kahve", aciklama: "Hario V60 filtre kahve makinesiyle hazırlanmış kahve.", fiyat: "250 ₺", resim: "images/hario.avif" },
+                                { isim: "Chemex Filtre Kahve", aciklama: "Chemex filtre kahve makinesiyle hazırlanmış kahve.", fiyat: "250 ₺", resim: "images/chemex.avif" },
+                                { isim: "İlave Süt", aciklama: "İçeceğinize ekstra süt eklenir.", fiyat: "50 ₺", resim: "images/sut.avif" },
+                                { isim: "İlave Aromalar", aciklama: "İçeceğinize ekstra aromalar eklenir.", fiyat: "50 ₺", resim: "images/aroma.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Nescafe",
+                            urunler: [
+                                { isim: "Sade Nescafe", aciklama: "Klasik Nescafe kahvesi.", fiyat: "180 ₺", resim: "images/sade_nescafe.avif"},
+                                { isim: "Sütlü Nescafe", aciklama: "Süt ile hazırlanmış Nescafe kahvesi.", fiyat: "200 ₺", resim: "images/nescafe.avif"},
+                                { isim: "Aromalı Nescafe", aciklama: "Aromalı Nescafe kahvesi.", fiyat: "230 ₺", resim: "images/nescafe.avif"}
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    akordiyonBaslik: "Soğuk İçecekler",
+                    altBolumler: [
+                        {
+                            baslik: "Alkolsüz Kokteyller",
+                            urunler: [
+                                { isim: "Margarita", aciklama: "Limon suyu, portakal likörü ve buz ile hazırlanmış alkolsüz kokteyl.", fiyat: "250 ₺", resim: "images/margarita.avif" },
+                                { isim: "VOG Mojito", aciklama: "Çilek-Nane-Blue Crocud-Sprite-Lime Limon.", fiyat: "250 ₺", resim: "images/vog_mojito.avif" },
+                                { isim: "Mojito", aciklama: "Nane, lime, şeker ve soda ile hazırlanmış alkolsüz kokteyl.", fiyat: "250 ₺", resim: "images/mojito.avif" },
+                                { isim: "Cool Lime", aciklama: "Lime suyu, şeker ve buz ile hazırlanmış alkolsüz kokteyl.", fiyat: "250 ₺", resim: "images/cool_lime.avif" },
+                                { isim: "Mango Passion", aciklama: "Limon suyu, mango suyu ve buz ile hazırlanmış alkolsüz kokteyl.", fiyat: "250 ₺", resim: "images/mango_passion.avif" },
+                                { isim: "Aperol", aciklama: "Şeftali –Nane –Limon", fiyat: "250 ₺", resim: "images/aperol.avif" },
+                                { isim: "Sangria", aciklama: "Çilek – Şeker-Tonik-Ananas", fiyat: "250 ₺", resim: "images/sangria.avif" },
+                                { isim: "Vanilla İtalyan", aciklama: "Şeftali-Vanilla-Krema-Süt", fiyat: "250 ₺", resim: "images/vanilla.avif" },
+                                { isim: "Paradise", aciklama: "Çilek – Limon –Orman Meyvesi-Portakal", fiyat: "250 ₺", resim: "images/paradise.avif" },
+                                { isim: "Exotic Passion", aciklama: "Mango-Ananas-Fıstık-Krema-Limon", fiyat: "250 ₺", resim: "images/exotic_passion.avif" },
+                                { isim: "Berry Dream", aciklama: "Orman Meyvesi –Vişne-Çilek-Krema –Çikolata", fiyat: "250 ₺", resim: "images/berry_dream.avif" },
+                                { isim: "Champion VOG", aciklama: "Hindistan Cevizi-Çilek-Krema –Süt", fiyat: "250 ₺", resim: "" }
+                            ]
+                        },
+                        {
+                            baslik: "Frozen",
+                            urunler: [
+                                { isim: "Frozen Çilek", aciklama: "Taze çilek, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_cilek.avif" },
+                                { isim: "Frozen Mango", aciklama: "Taze mango, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_mango.avif" },
+                                { isim: "Frozen Karpuz", aciklama: "Taze karpuz, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_karpuz.avif" },
+                                { isim: "Frozen Kavun", aciklama: "Taze kavun, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_kavun.avif" },
+                                { isim: "Frozen Muz", aciklama: "Taze muz, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_muz.avif" },
+                                { isim: "Frozen Şeftali", aciklama: "Taze şeftali, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_seftali.avif" },
+                                { isim: "Frozen Kivi", aciklama: "Taze kivi, buz ve şeker ile hazırlanmış soğuk içecek.", fiyat: "200 ₺", resim: "images/frozen_kivi.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Smoothie",
+                            urunler: [
+                                { isim: "Çilekli Smoothie", aciklama: "Taze çilek, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "200 ₺", resim: "images/cilek_smoothie.avif" },
+                                { isim: "Mangolu Smoothie", aciklama: "Taze mango, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "200 ₺", resim: "images/mango_smoothie.avif" },
+                                { isim: "Tropical Smoothie", aciklama: "Taze meyveler, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "230 ₺", resim: "images/tropical.avif" },
+                                { isim: "Yulaflı Smoothie", aciklama: "Taze yulaf, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "230 ₺", resim: "images/yulaf_smoothie.avif" },
+                                { isim: "Muzlu Smoothie", aciklama: "Taze muz, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "200 ₺", resim: "images/muz_smoothie.avif" },
+                                { isim: "Detox Smoothie", aciklama: "Taze sebzeler, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "200 ₺", resim: "images/detox_smoothie.avif" },
+                                { isim: "Bowl Mix", aciklama: "Taze meyveler, yoğurt ve buz ile hazırlanmış smoothie.", fiyat: "200 ₺", resim: "images/bowl.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Milshake",
+                            urunler: [
+                                { isim: "Çikolatalı Milshake", aciklama: "Çikolata, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Vanilyalı Milshake", aciklama: "Vanilya, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Çilekli Milshake", aciklama: "Çilek, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Karamel & Muzlu Milshake", aciklama: "Karamel, muz, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Karadutlu Milshake", aciklama: "Karadut, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Muzlu Milshake", aciklama: "Muz, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Mangolu Milshake", aciklama: "Mango, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" },
+                                { isim: "Oreolu Milshake", aciklama: "Oreo, süt ve buz ile hazırlanmış milshake.", fiyat: "200 ₺", resim: "" }
+                            ]
+                        },
+                        {
+                            baslik: "Limonatalar",
+                            urunler: [
+                                { isim: "Ev Yapımı Limonata", aciklama: "Taze limon suyu, su ve şeker ile hazırlanmış klasik limonata.", fiyat: "190 ₺", resim: "images/limonata.avif" },
+                                { isim: "Naneli Limonata", aciklama: "Taze limon suyu, nane, su ve şeker ile hazırlanmış limonata.", fiyat: "200 ₺", resim: "images/naneli_limonata.avif" },
+                                { isim: "Çilekli Limonata", aciklama: "Taze limon suyu, çilek, su ve şeker ile hazırlanmış limonata.", fiyat: "200 ₺", resim: "images/cilekli_limonata.avif" },
+                                { isim: "Karadutlu Limonata", aciklama: "Taze limon suyu, karadut, su ve şeker ile hazırlanmış limonata.", fiyat: "200 ₺", resim: "images/karadutlu_limonata.avif" },
+                                { isim: "Portakal Suyu", aciklama: "Taze sıkılmış portakal suyu.", fiyat: "200 ₺", resim: "images/portakal_suyu.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Diğer Soğuk İçecekler",
+                            urunler: [
+                                { isim: "Coca Cola", aciklama: "Zero - Light", fiyat: "140 ₺", resim: "images/coca_cola.avif" },
+                                { isim: "Fanta", aciklama: "", fiyat: "140 ₺", resim: "images/fanta.avif" },
+                                { isim: "Sprite", aciklama: "", fiyat: "140 ₺", resim: "images/sprite.avif" },
+                                { isim: "Fuse Tea", aciklama: "Limon - Şeftali - Ananas - Mango - Karpuz", fiyat: "130 ₺", resim: "images/fuse_tea.avif" },
+                                { isim: "Schweppes", aciklama: "Mandalina - Limon - Misket Limon", fiyat: "120 ₺", resim: "images/schweppes.avif" },
+                                { isim: "Monster", aciklama: "", fiyat: "150 ₺", resim: "images/monster.avif" },
+                                { isim: "Red Bull", aciklama: "", fiyat: "200 ₺", resim: "images/red_bull.avif" },
+                                { isim: "Burn", aciklama: "", fiyat: "150 ₺", resim: "images/burn.avif" },
+                                { isim: "Meyve Suları", aciklama: "Vişne – Kayısı - Şeftali - Portakal – Karışık", fiyat: "130 ₺", resim: "images/meyve_sulari.avif" },
+                                { isim: "Churchill", aciklama: "", fiyat: "120 ₺", resim: "images/churchill.avif" },
+                                { isim: "Sade Soda", aciklama: "", fiyat: "100 ₺", resim: "images/sade_soda.avif" },
+                                { isim: "Meyveli Soda", aciklama: "Elma-Limon-Karpuz-Çilek-Nar-Mango-Ananas", fiyat: "130 ₺", resim: "images/meyveli_soda.avif" },
+                                { isim: "Büyük Ayran", aciklama: "", fiyat: "120 ₺", resim: "images/buyuk_ayran.avif" },
+                                { isim: "Cam Şişe Su", aciklama: "", fiyat: "60 ₺", resim: "images/cam_sise_su.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Çaylar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Bardak Çay", aciklama: "", fiyat: "60 ₺", resim: "images/bardak_cay.avif" },
+                                { isim: "Fincan Çay", aciklama: "", fiyat: "95 ₺", resim: "images/fincan_cay.avif" },
+                                { isim: "İngiliz Çayı", aciklama: "", fiyat: "150 ₺", resim: "images/ingiliz_cayi.avif" },
+                                { isim: "Chai Tea Latte", aciklama: "", fiyat: "180 ₺", resim: "images/chai_tea_latte.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Bitki Çayları",
+                            urunler: [
+                                { isim: "Nane Limon", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Ihlamur", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Adaçayı", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Yeşil Çay", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Kuşburnu", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Böğürtlen", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Kış Çayı", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Papatya", aciklama: "", fiyat: "200 ₺", resim: "images/bitki_cayi.avif" },
+                                { isim: "Rezene", aciklama: "", fiyat: "200 ₺", resim: "images/rezene.avif" },
+                                { isim: "Elma Tarçın", aciklama: "", fiyat: "200 ₺", resim: "images/elma_tarcin.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Sahlepler",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Sade Sahlep", aciklama: "", fiyat: "190 ₺", resim: "images/sahlep.avif" },
+                                { isim: "Fındıklı Sahlep", aciklama: "", fiyat: "200 ₺", resim: "images/sahlep.avif" },
+                                { isim: "Damla Sakızlı Sahlep", aciklama: "", fiyat: "200 ₺", resim: "images/sahlep.avif" },
+                                { isim: "Çilekli Sahlep", aciklama: "", fiyat: "200 ₺", resim: "images/sahlep.avif" },
+                                { isim: "Çikolatalı Sahlep", aciklama: "", fiyat: "200 ₺", resim: "images/cikolatali_sahlep.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Sıcak Çikolatalar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Sade Sıcak Çikolata", aciklama: "", fiyat: "190 ₺", resim: "images/sicak_cikolata.avif" },
+                                { isim: "Beyaz Sıcak Çikolata", aciklama: "", fiyat: "190 ₺", resim: "images/beyaz_cikolata.avif" },
+                                { isim: "Muzlu Sıcak Çikolata", aciklama: "", fiyat: "200 ₺", resim: "images/muz_cikolata.avif" },
+                                { isim: "Çilekli Sıcak Çikolata", aciklama: "", fiyat: "200 ₺", resim: "images/cilek_cikolata.avif" },
+                                { isim: "Soğuk Çikolata", aciklama: "", fiyat: "230 ₺", resim: "images/soguk_cikolata.avif" },
+                                { isim: "Soğuk Beyaz Çikolata", aciklama: "", fiyat: "230 ₺", resim: "images/soguk_beyaz.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Detox İçecekler",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Sağlık Deposu", aciklama: "Zencefil-Nane-Limon Suyu-Portakal-Kivi-Siyah Üzüm", fiyat: "200 ₺", resim: "images/saglik_deposu.avif" },
+                                { isim: "Güç Kaynağı", aciklama: "Ispanak-Maydanoz-Salatalık-Havuç-Ananas-Limon Suyu", fiyat: "200 ₺", resim: "images/guc_kaynagi.avif" },
+                                { isim: "Full Body", aciklama: "Yeşil Elma – Salatalık-Maydanoz-Taze Zencefil-Limon –Portakal Suyu", fiyat: "200 ₺", resim: "images/full_body.avif" },
+                                { isim: "Protein", aciklama: "Protein Tozu – Tahin Fındık –Bal – Muz", fiyat: "200 ₺", resim: "images/protein.avif" },
+                                { isim: "Karakız", aciklama: "Karadut –Elma –Çilek-Portakal Suyu", fiyat: "200 ₺", resim: "images/karakiz.avif" }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+            // 2. KATEGORİ: TATLILAR 
+            tatlilar: [
+                {
+                    akordiyonBaslik: "Cheesecake",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "San Sebastian Cheesecake", aciklama: "Belçika çikolatası sosu ile servis edilir.", fiyat: "260 ₺", resim: "images/san_sebastian.avif" },
+                                { isim: "Frambuazlı Cheesecake", aciklama: "Taze frambuaz sosu ile servis edilir.", fiyat: "250 ₺", resim: "images/frambuaz_cheesecake.avif" },
+                                { isim: "Çikolatalı Cheesecake", aciklama: "Bitter çikolata sosu ile servis edilir.", fiyat: "250 ₺", resim: "images/cikolata_cheesecake.avif" },
+                                { isim: "Limonlu Cheesecake", aciklama: "Taze limon sosu ile servis edilir.", fiyat: "250 ₺", resim: "images/limon_cheesecake.avif" },
+                                { isim: "Oreolu Cheesecake", aciklama: "", fiyat: "230 ₺", resim: "" },
+                                { isim: "Dubai Çikolatalı Cheesecake", aciklama: "", fiyat: "260 ₺", resim: "" }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    akordiyonBaslik: "Özel Tatlılar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Red Velvet Pasta", aciklama: "Krem peynirli ve kırmızı kadife kek ile hazırlanmış pasta.", fiyat: "230 ₺", resim: "images/red_velvet.avif" },
+                                { isim: "Orman Meyveli Pasta", aciklama: "", fiyat: "230 ₺", resim: "images/orman_cheesecake.avif" },
+                                { isim: "Oreolu Velvet Pasta", aciklama: "", fiyat: "230 ₺", resim: "images/oreo_velvet.avif" },
+                                { isim: "Krokan Çikolatalı Pasta", aciklama: "", fiyat: "230 ₺", resim: "" },
+                                { isim: "Muzlu Çikolatalı Pasta", aciklama: "", fiyat: "230 ₺", resim: "" },
+                                { isim: "Fıstık", aciklama: "", fiyat: "250 ₺", resim: "images/fistik.avif" },
+                                { isim: "Latte Kare Mono", aciklama: "", fiyat: "230 ₺", resim: "images/latte_kare.avif" },
+                                { isim: "Blue Berries", aciklama: "", fiyat: "230 ₺", resim: "images/blue_berries.avif" },
+                                { isim: "Devil's", aciklama: "", fiyat: "230 ₺", resim: "images/devil.avif" },
+                                { isim: "Bella Vista", aciklama: "", fiyat: "230 ₺", resim: "images/bella_vista.avif" },
+                                { isim: "Red Love's", aciklama: "", fiyat: "250 ₺", resim: "images/red_love.avif" },
+                                { isim: "Gökkuşağı Paten", aciklama: "", fiyat: "230 ₺", resim: "" }
+                            ]
+                        },
+                    ],
+                },
+                {
+                    akordiyonBaslik: "Klasik Tatlılar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Waffle", aciklama: "", fiyat: "400 ₺", resim: "images/waffle.avif" },
+                                { isim: "Sufle", aciklama: "", fiyat: "230 ₺", resim: "images/sufle.avif" },
+                                { isim: "Tiramisu", aciklama: "", fiyat: "230 ₺", resim: "images/tiramisu.avif" },
+                                { isim: "Trileçe", aciklama: "", fiyat: "200 ₺", resim: "images/trilece.avif" },
+                                { isim: "Magnolia", aciklama: "", fiyat: "200 ₺", resim: "images/magnolia.avif" },
+                                { isim: "Mozaik Pasta", aciklama: "", fiyat: "230 ₺", resim: "images/mozaik.avif" }
+                            ]
+                        },
+                    ]
+                }
+            ],
+
+            yiyecekler: [
+                {
+                    akordiyonBaslik: "Kahvaltılar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Ekspress Kahvaltı", aciklama: "Beyaz Peynir – Kaşar- Siyah Zeytin-Yeşil Zeytin-Sosis-Tereyağ-Bal-Sigara Böreği-Haşlanmış Yumurta-Pişi-Domates-Salata-1 Adet Duble Çay ", fiyat: "650 ₺", resim: "images/ekspres_kahv.avif" },
+                                { isim: "VOG Kahvaltı", aciklama: "Sert İnek Peyniri-Lüx Kaşar-Siyah Zeytin-Çeçil Peyniri-Yeşil  Zeytin –Tereyağ-Süzme Çiçek Balı-Salatalık-Domates-Roka-Yeşil Biber –Kırmızı Biber-Acuka-Ceviz-Kayısı-Tavuk Jambon-Sigara Böreği-Omlet-Pişi-Parmak Patates-Çikolata-Çilek Reçeli-Salam-Sınırsız Çay ve Türk Kahvesi İkramımızdır. ", fiyat: "1.300 ₺", resim: "images/vog_kahv.avif" },
+                                { isim: "VOG Serpme Kahvaltı", aciklama: " Sert İnek Peyniri – Çeçil Peyniri-Lüx Kaşar-Labne Peyniri-Siyah Zeytin-Yeşil Zeytin-Tereyağ-Süzme Çiçek Bal –Çikolata –Portakal Reçeli-Vişne Reçeli-Acuka-Tavuk Jambon-Dana Jambon-Salçalı Sosis-Roka-Yeşil Biber –Kırmızı Biber –Ceviz-Kuru Kayısı-Domates –Salatalık-Sosis-Parmak Patates-Sigara Böreği-Omlet-Gözleme –Sucuk Tava –Menemen Sınırsız Çay - Sınırsız Pişi ve Türk Kahvesi İkramımızdır.", fiyat: "1.500 ₺", resim: "images/serp_kahv.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Omletler",
+                            urunler: [
+                                { isim: "Sade Omlet", aciklama: "3 Adet Yumurta ile hazırlanır.", fiyat: "200 ₺", resim: "images/sade_omlet.avif" },
+                                { isim: "Kaşarlı Omlet", aciklama: "3 Adet Yumurta ve Kaşar Peyniri ile hazırlanır.", fiyat: "220 ₺", resim: "images/kasarli_omlet.avif" },
+                                { isim: "Sucuklu Omlet", aciklama: "3 Adet Yumurta ve Sucuk ile hazırlanır.", fiyat: "230 ₺", resim: "images/sucuklu_omlet.avif" },
+                                { isim: "Sebzeli Omlet", aciklama: "3 Adet Yumurta ve mevsim sebzeleri ile hazırlanır.", fiyat: "220 ₺", resim: "images/sebzeli_omlet.avif" },
+                                { isim: "Mantarlı Omlet", aciklama: "3 Adet Yumurta ve mantar ile hazırlanır.", fiyat: "230 ₺", resim: "images/mantarli_omlet.avif" },
+                                { isim: "Kaşar & Sucuklu Omlet", aciklama: "3 Adet Yumurta, kaşar peyniri, sucuk ile hazırlanır.", fiyat: "250 ₺", resim: "images/kasar_sucuklu_omlet.avif" },
+                                { isim: "Kavurmalı Omlet", aciklama: "3 Adet Yumurta ve sebzeler ile hazırlanır.", fiyat: "300 ₺", resim: "images/kavurmali_omlet.avif" },
+                                { isim: "Pastırmalı Omlet", aciklama: "3 Adet Yumurta ve pastırma ile hazırlanır.", fiyat: "300 ₺", resim: "images/pastirmali_omlet.avif" }
+                            ]
+                        },
+                        {
+                            baslik: "Menemenler",
+                            urunler: [
+                                { isim: "Sade Menemen", aciklama: "Domates, biber ve yumurta ile hazırlanır.", fiyat: "250 ₺", resim: "images/menemen.avif" },
+                                { isim: "Kaşarlı Menemen", aciklama: "Domates, biber, yumurta ve kaşar peyniri ile hazırlanır.", fiyat: "260 ₺", resim: "images/kasar_menemen.avif" },
+                                { isim: "Sucuklu Menemen", aciklama: "Domates, biber, yumurta ve sucuk ile hazırlanır.", fiyat: "280 ₺", resim: "images/sucuklu_menemen.avif" },
+                                { isim: "Kaşar & Sucuklu Menemen", aciklama: "Domates, biber, yumurta, sucuk ve kaşar peyniri ile hazırlanır.", fiyat: "300 ₺", resim: "images/kasar_sucuk_menemen.avif" },
+                                { isim: "Beyaz Peynirli Menemen", aciklama: "Domates, biber, yumurta ve beyaz peynir ile hazırlanır.", fiyat: "270 ₺", resim: "images/beyaz_menemen.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Aperatifler",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                {isim:"Paçanga Böreği", aciklama:"2 adet.", fiyat:"350 ₺", resim:"images/pacanga.avif"},
+                                {isim:"Sigara Böreği", aciklama:"6 adet.", fiyat:"250 ₺", resim:"images/sigara.avif"},
+                                {isim:"Mozerella Sticks", aciklama:"6 adet.", fiyat:"250 ₺", resim:"images/stick.avif"},
+                                {isim:"Parmak Patates", aciklama:"", fiyat:"300 ₺", resim:"images/patates.avif"},
+                                {isim:"Elma Dilim Patates", aciklama:"", fiyat:"300 ₺", resim:"images/elma_dilim.avif"},
+                                {isim:"Çıtır Tavuk", aciklama:"6 adet.", fiyat:"250 ₺", resim:"images/citir_tavuk.avif"},
+                                {isim:"Soğan Halkası", aciklama:"6 adet.", fiyat:"250 ₺", resim:"images/sogan.avif"},
+                                {isim:"Sosis Tabağı", aciklama:"6 adet.", fiyat:"250 ₺", resim:"images/sosis.avif"},
+                                {isim:"Combo Tabağı", aciklama:"Parmak Patates , Elma Dilim Patates, Sosis, Nugget, Sigara Böreği, Soğan Halkası, Çıtır Tavuk, Mozerella Sticks", fiyat:"500 ₺", resim:"images/combo_tabak.avif"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Gözlemeler",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Kaşarlı Gözleme", aciklama: "Domates ve Salatalık ile Servis Edilir.", fiyat: "250 ₺", resim: "images/kasar_gozleme.avif" },
+                                { isim: "Karışık Gözleme", aciklama: "Kaşar - Sucuk", fiyat: "300 ₺", resim: "images/kasar_gozleme.avif" },
+                                { isim: "Patatesli Gözleme", aciklama: "", fiyat: "280 ₺", resim: "images/kasar_gozleme.avif" },
+                                { isim: "Sucuklu Gözleme", aciklama: "", fiyat: "280 ₺", resim: "images/sucuklu_gozleme.avif" },
+                                { isim: "Kavurmalı Kaşarlı Gözleme", aciklama: "", fiyat: "400 ₺", resim: "images/kavurmali_gozleme.avif" },
+                                { isim: "Cheddar Tavuklu Gözleme", aciklama: "", fiyat: "350 ₺", resim: "images/kasar_gozleme.avif" },
+                                { isim: "Kaşar & Ispanaklı Gözleme", aciklama: "", fiyat: "300 ₺", resim: "images/kasar_gozleme.avif" },
+                                { isim: "Kaşar & Mantarlı Gözleme", aciklama: "", fiyat: "350 ₺", resim: "images/kasar_gozleme.avif" }
+                            ]
+                        }
+                    ]
+                },
+                
+                // 3. ANA AKORDİYON (Tostlar)
+                {
+                    akordiyonBaslik: "Tostlar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Kaşarlı Tost", aciklama: "Domates ve Salatılık ile Servis Edilir.", fiyat: "250 ₺", resim: "images/kasarli_tost.avif" },
+                                { isim: "Sucuklu Tost", aciklama: "Domates ve Salatılık ile Servis Edilir.", fiyat: "280 ₺", resim: "images/sucuklu_tost.avif" },
+                                { isim: "Karışık Tost", aciklama: "Domates ve Salatılık ile Servis Edilir.", fiyat: "300 ₺", resim: "images/karisik_tost.avif" },
+                                { isim: "Mantar & Kaşarlı Tost", aciklama: "Domates ve Salatılık ile Servis Edilir.", fiyat: "330 ₺", resim: "images/mantarli_tost.avif" },
+                                { isim: "Kavurma & Kaşarlı Tost", aciklama: "Domates ve Salatılık ile Servis Edilir.", fiyat: "350 ₺", resim: "images/kavurmali_tost.avif" }
+                            ]
+                        }
+                    ]  
+                },
+
+                {
+                    akordiyonBaslik: "Burgerler",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Hamburger", aciklama: "Izgara köfte, marul, domates, turşu ve özel sos ile hazırlanır.", fiyat: "430 ₺", resim: "images/hamburger.avif" },
+                                { isim: "Cheeseburger", aciklama: "Izgara köfte, cheddar peyniri, marul, domates ve özel sos ile hazırlanır.", fiyat: "480 ₺", resim: "images/cheese.avif" },
+                                { isim: "Vogue Burger", aciklama: " Köfte, Karamelize Sos, Kornişon Turşu, Patates Cips, Mevsim Salatası ile Servis Edilir. ", fiyat: "600 ₺", resim: "images/vogue_burger.avif" },
+                                { isim: "Tavuk Burger", aciklama: "Izgara tavuk göğsü, marul, domates ve özel sos ile hazırlanır.", fiyat: "350 ₺", resim: "images/tavuk_burger.avif" },
+                                { isim: "Beef Burger", aciklama: "Izgara dana köftesi, mantar, cheddar peyniri, marul, domates ve özel sos ile hazırlanır.", fiyat: "600 ₺", resim: "images/beef.avif" },
+                                { isim: "Mexican Burger", aciklama: " Köfte, Kapya Biber, Çarliston Biber, Soğan, Patates Cips, Mevsim Salatası ile Servis Edilir. (Acı Oranı İsteğe Göre Değiştirilebilir).", fiyat: "480 ₺", resim: "images/mexican_burger.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Çocuk Menüleri",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Trio Burger Menü", aciklama: "", fiyat: "300 ₺", resim: "images/trio_burger.avif" },
+                                { isim: "Köfte Menü", aciklama: "", fiyat: "300 ₺", resim: "images/kofte_menu.avif" },
+                                { isim: "Tavuk Pane Menü", aciklama: "", fiyat: "260 ₺", resim: "images/tavuk_pane_menu.avif" },
+                                { isim: "Sosis Menü", aciklama: "", fiyat: "250 ₺", resim: "images/sosis_menu.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Pizzalar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Margherita Pizza (Orta | Büyük)", aciklama: "Domates sosu, mozzarella peyniri ve taze fesleğen ile hazırlanır.", fiyat: "430 | 480 ₺", resim: "images/margherita.avif" },
+                                { isim: "Pepperoni Pizza (Orta | Büyük)", aciklama: "Domates sosu, mozzarella peyniri ve pepperoni dilimleri ile hazırlanır.", fiyat: "430 | 480 ₺", resim: "images/pepperoni.avif" },
+                                { isim: "Vogue Pizza (Orta | Büyük)", aciklama: "Mozzarella, Kasap Sucuk, Salam, Pastırma, Sosis, Zeytin, Mantar, Domates, Biber, Mısır.", fiyat: "500 | 550 ₺", resim: "images/vog_pizza.avif" },
+                                { isim: "Tavuklu Pizza (Orta | Büyük)", aciklama: "Domates sosu, mozzarella peyniri ve ızgara tavuk parçaları ile hazırlanır.", fiyat: "450 | 500 ₺", resim: "images/tavuklu_pizza.avif" },
+                                { isim: "3 Peynirli Pizza (Orta | Büyük)", aciklama: "Domates sosu, mozzarella, cheddar ve parmesan peyniri ile hazırlanır.", fiyat: "500 | 550 ₺", resim: "images/ucpeynir.avif" },
+                                { isim: "Milano Pizza (Orta | Büyük)", aciklama: "Pizza Sosu, Mozzarella, Jambon, Mısır, Maydonoz.", fiyat: "430 | 480 ₺", resim: "images/milano.avif" },
+                                { isim: "Et Sever Pizza (Orta | Büyük)", aciklama: "Mozzarella, Kasap Sucuk, Pastırma, Kavurma, Kırmızı Et, Salam, Mantar.", fiyat: "650 | 700 ₺", resim:"images/etsever.avif" },
+                                { isim: "Acılı Alaturka Pizza (Orta | Büyük)", aciklama: "Mozzarella, Jalapeno Biber, Kırmızı Biber, Yeşil Biber, Sucuk, Pastırma, Salam, Sosis, Mısır, Acı Sos.", fiyat: "500 | 550 ₺", resim:"images/alaturka.avif" },
+                                { isim: "Ton Balıklı Pizza (Orta | Büyük)", aciklama: "Mozzarella, Ton Balığı, Mısır, Zeytin, Domates, Biber.", fiyat: "450 | 500 ₺", resim:"images/tonbalikli_pizza.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Makarnalar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Spagetti Bolognese", aciklama: "Klasik İtalyan sosu ile hazırlanmış spagetti.", fiyat: "350 ₺", resim: "images/bolonez.avif" },
+                                { isim: "Fettucine Alfredo", aciklama: "Kremalı alfredo sosu ile hazırlanmış fettucine.", fiyat: "350 ₺", resim: "images/alfredo.avif" },
+                                { isim: "Penne Arrabbiata", aciklama: "Acılı domates sosu ile hazırlanmış penne.", fiyat: "300 ₺", resim: "images/arabiata.avif" },
+                                { isim: "Napoliten Spagetti", aciklama: "Napoliten sosu ile hazırlanmış spagetti.", fiyat: "300 ₺", resim: "images/napoliten.avif" },
+                                { isim: "Penne Chicken", aciklama: "Izgara tavuk ve kremalı sos ile hazırlanmış penne.", fiyat: "350 ₺", resim: "images/penne_chicken.avif" },
+                                { isim: "Fettucine Pesto", aciklama: "Pesto sosu ile hazırlanmış fettucine.", fiyat: "300 ₺", resim: "images/pesto.avif" },
+                                { isim: "Penne Carbonara", aciklama: "Kremalı carbonara sosu ile hazırlanmış penne.", fiyat: "380 ₺", resim: "images/carbonara.avif" },
+                                { isim: "Beef Soslu Penne", aciklama: "Klasik beef sosu ile hazırlanmış penne.", fiyat: "450 ₺", resim: "images/beef_makarna.avif" },
+                                { isim: "Ev Mantısı", aciklama: "Klasik mantı, yoğurt ve tereyağı sosu ile hazırlanır.", fiyat: "400 ₺", resim: "images/manti.avif" },
+                                { isim: "Et Noodle", aciklama: "Soya Sosu ve Susam Yağı İle Sotelenerek Servis Edilir.", fiyat: "450 ₺", resim: "images/et_noodle.avif" },
+                                { isim: "Tavuk Noodle", aciklama: "Soya Sosu ve Susam Yağı İle Sotelenerek Servis Edilir.", fiyat: "400 ₺", resim: "images/tavuk_noodle.avif" },
+                                { isim: "Sebzeli Noodle", aciklama: "Soya Sosu ve Susam Yağı İle Sotelenerek Servis Edilir.", fiyat: "400 ₺", resim: "images/sebzeli_noodle.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Wrapler",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Tavuklu Wrap", aciklama: "Izgara tavuk, marul, domates ve özel sos ile hazırlanır.", fiyat: "400 ₺", resim: "images/tavuk_wrap.avif" },
+                                { isim: "Etli Wrap", aciklama: "Izgara et, marul, domates ve özel sos ile hazırlanır.", fiyat: "450 ₺", resim: "images/et_wrap.avif" },
+                                { isim: "Köfteli Wrap", aciklama: "Köfte, marul, domates ve özel sos ile hazırlanır.", fiyat: "450 ₺", resim: "images/kofte_wrap.avif" },
+                                { isim: "Cheddarlı Tavuklu Wrap", aciklama: "Izgara tavuk, cheddar peyniri, marul, domates ve özel sos ile hazırlanır.", fiyat: "450 ₺", resim: "images/cheddar_wrap.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Izgaralar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Izgara Tavuk", aciklama: "Izgara tavuk göğsü, mevsim salatası ve patates ile servis edilir.", fiyat: "500 ₺", resim: "images/izgara_tavuk.avif" },
+                                { isim: "Izgara Köfte", aciklama: "Izgara köfte, mevsim salatası ve patates ile servis edilir.", fiyat: "550 ₺", resim: "images/izgara_kofte.avif" },
+                                { isim: "Kiremitte Kaşarlı Tavuk", aciklama: "", fiyat: "600 ₺", resim: "" },
+                                { isim: "Kaşarlı Izgara Köfte", aciklama: "", fiyat: "650 ₺", resim: "images/kasarli_izgara_kofte.avif" },
+                                { isim: "VOG Special Izgara", aciklama: " Köfte-Tavuk-Lokum-Kasap Sucuk Közlenmiş Domates-Biber – Patates ve Salata ile Servis Edilir ", fiyat: "700 ₺", resim: "images/vog_special_izgara.avif" },
+                                { isim: "Tavuk Güveç", aciklama: "", fiyat: "550 ₺", resim: "" },
+                                { isim: "Tavuk Şinitzel", aciklama: "", fiyat: "550 ₺", resim: "" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Etler",
+                    altBolumler: [
+                        {
+                            baslik: "Kırmızı Etler",
+                            urunler: [
+                                { isim: "Barbekü Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/bbq_dana.avif" },
+                                { isim: "Köri Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/kori_dana.avif" },
+                                { isim: "Mantar Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/mantar_dana.avif" },
+                                { isim: "Mexica  Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/meksika_dana.avif" },
+                                { isim: "Soya Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/soya_dana.avif" },
+                                { isim: "Cheddar Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/cheddar_dana.avif" },
+                                { isim: "Tatlı - Ekşi Soslu Dana Eti", aciklama: "", fiyat: "500 ₺", resim: "images/tatli_dana.avif" }
+                            ],
+                        },
+                        {
+                            baslik: "Beyaz Etler",
+                            urunler: [
+                                { isim: "Barbekü Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/bbq_tavuk.avif" },
+                                { isim: "Köri Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/kori_tavuk.avif" },
+                                { isim: "Mantar Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/mantar_tavuk.avif" },
+                                { isim: "Mexica  Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/meksika_tavuk.avif" },
+                                { isim: "Soya Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/soya_tavuk.avif" },
+                                { isim: "Cheddar Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/cheddar_tavuk.avif" },
+                                { isim: "Tatlı - Ekşi Soslu Tavuk", aciklama: "", fiyat: "450 ₺", resim: "images/tatli_tavuk.avif" }
+                            ]
+                        },
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Extreme",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Nachos (Latin)", aciklama: "Kıyma – İç Harç –Cheddar Sos- Guacamole Soslu Yoğur ve Cips İle Servis Edilir.", fiyat: "450 ₺", resim: "images/nachos.avif" },
+                                { isim: "Taco (Meksika)", aciklama: "Kıymalı İç Harç-Cheddar Sos-Guacamole Sos-Yoğurt Sos ve cips ile servis edilir.", fiyat: "450 ₺", resim: "images/taco.avif" },
+                                { isim: "Quesadilla Et (Portekiz)", aciklama: "Tiftik Et -Kırmızı Biber-Yeşil Biber –Cheddar Peyniri-Kaşar Peyniri", fiyat: "500 ₺", resim: "images/que.avif" },
+                                { isim: "Tavuk (Portekiz)", aciklama: "Tiftik Tavuk-Kırmızı Biber-Yeşil Biber –Cheddar Peyniri-Kaşar Peyniri ve cips ile servis edilir.", fiyat: "410 ₺", resim: "images/tavuk_portekiz.avif" },
+                                { isim: "Ramen Dana (Asya)", aciklama: "Dana Eti – Mantar –Yumurta –Yeşil Soğan –Nori Yaprağı –Ramen Eriştesi ve Et Suyu ile servis edilir.", fiyat: "500 ₺", resim: "images/ramen_dana.avif" },
+                                { isim: "Ramen Tavuk (Asya)", aciklama: "Tavuk Eti – Mantar –Yumurta –Yeşil Soğan –Nori Yaprağı –Ramen Eriştesi ve Tavuk Suyu ile servis edilir.", fiyat: "450 ₺", resim: "images/ramen_tavuk.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Special",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Steak Diana", aciklama: "Dana Bonfile-Mantar Sos-Sebze Garnitür-Salata –Patates Püresi ile Servis Edilir.", fiyat:"700 ₺", resim: "images/steak.avif" },
+                                { isim: "California Soslu Bonfile", aciklama: "", fiyat: "700 ₺", resim: "images/bonf.avif" },
+                                { isim: "Demi Glace Soslu Bonfile", aciklama: "Bonfile –Glace Sos- Sebze Garnitür-Salata- Patates Püresi ile Servis Edilir.", fiyat: "750 ₺", resim: "images/glace.avif" },
+                                { isim: "Tereyağlı Dana Lokum", aciklama: "Dana Lokum –Tereyağı –Sebze Garnitür-Salata- Patates Püresi ile Servis Edilir.", fiyat: "750 ₺", resim: "images/lokum.avif" },
+                                { isim: "Antrikot", aciklama: "", fiyat: "700 ₺", resim: "images/antrikot.avif" },
+                                { isim: "Rokfor Soslu Dana Kulesi", aciklama: "Bonfile –Rokfor Sos-Sebze Garnitür-Salata- Patates Püresi ile Servis Edilir.", fiyat: "750 ₺", resim: "images/rokfor.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Fajita ve Burito",
+                    altBolumler: [
+                        {
+                            baslik: "Fajitalar",
+                            urunler: [
+                                { isim: "Fajita Tavuk", aciklama: "Jülyen Tavuk Eti – Kapya Biber-Çarliston Biber-Soğan -Soya Sosu –Meksika Fasülyesi-Mısır –Solkirim Sos ile Servis Edilir.", fiyat: "550 ₺", resim: "images/fajita_tavuk.avif" },
+                                { isim: "Fajita Et", aciklama: "Jülyen Dana Eti – Kapya Biber-Çarliston Biber-Soğan -Soya Sosu –Meksika Fasülyesi-Mısır –Solkirim Sos ile Servis Edilir.", fiyat: "600 ₺", resim: "images/fajita_et.avif" },
+                                { isim: "Fajita Combo", aciklama: "Jülyen Dana ve Tavuk Eti – Kapya Biber-Çarliston Biber-Soğan -Soya Sosu –Meksika Fasülyesi-Mısır –Solkirim Sos ile Servis Edilir.", fiyat: "650 ₺", resim: "images/fajita_combo.avif" }
+                            ],
+                        },
+                        {
+                            baslik: "Buritolar",
+                            urunler: [
+                                { isim: "Burito Tavuk", aciklama: "Kapya Biber- Çarliston Biber –Soğan –Soya Sosu ile sotelenir tortilla ekmeğie sarılır üzerine napoliten mozerella peynir ile fırında eritilir.Patates Kızartması Meksika Fasülyesi ve Mısır ile Servis Edilir.", fiyat: "450 ₺", resim: "images/burito_tavuk.avif" },
+                                { isim: "Burito Et", aciklama: "Kapya Biber- Çarliston Biber –Soğan –Soya Sosu ile sotelenir tortilla ekmeğie sarılır üzerine napoliten mozerella peynir ile fırında eritilir.Patates Kızartması Meksika Fasülyesi ve Mısır ile Servis Edilir.", fiyat: "500 ₺", resim: "images/burito_et.avif" },
+                                { isim: "Burito Kıyma", aciklama: "Kapya Biber- Çarliston Biber –Soğan-Kavrulmuş Kıyma ve Beyaz Peynir ile Tortilla Ekmeğine Sarılır Patates Kızartması, Meksika Fasülyesi ,Mısır ve Acı Sos ile Servis Edilir.", fiyat: "500 ₺", resim: "images/burito_kiyma.avif" },
+                                { isim: "Burito Combo", aciklama: "Julien Et ve Julien Tavuk Kapya Biber- Çarliston Biber –Soğan –Soya Sosu ile sotelenir tortilla ekmeğie sarılır üzerine napoliten mozerella peynir ile fırında eritilir.Patates Kızartması Meksika Fasülyesi ve Mısır ile Servis Edilir.", fiyat: "550 ₺", resim: "images/burito_combo.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Salatalar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Sezar Salata", aciklama: "Marul – Tavuk – Parmesan Peyniri – Çıtır Ekmek – Sezar Sos ile Servis Edilir.", fiyat: "350 ₺", resim: "images/sezar.avif" },
+                                { isim: "Akdeniz Salata", aciklama: "Marul – Domates – Salatalık – Zeytin – Beyaz Peynir – Zeytinyağı ve Limon ile Servis Edilir.", fiyat: "300 ₺", resim: "images/akdeniz.avif" },
+                                { isim: "Ton Balıklı Salata", aciklama: "Marul – Ton Balığı – Mısır – Domates – Salatalık – Zeytinyağı ve Limon ile Servis Edilir.", fiyat: "350 ₺", resim: "images/ton_salata.avif" },
+                                { isim: "Kinoa Salata", aciklama: "Kinoa – Domates –Salatalık – Dere Otu –Maydanoz – Yağ ve Nar Ekşisi ile Servis Edilir.", fiyat: "350 ₺", resim: "images/kinoa.avif" },
+                                { isim: "Hellim Salata", aciklama: "Hellim Peyniri –Marul –Roka –Domates -Yağ ve Nar Ekşisi ile Servis Edilir.", fiyat: "300 ₺", resim: "images/hellim.avif" },
+                                { isim: "Thai Chicken Salata", aciklama: "Göbek Marul-Domates – Salata- Jülyen Tavuk –Mantar –Mısır- Soya Sosu – Çıtır Ekmek ile Servis Edilir.", fiyat: "400 ₺", resim: "images/thai_tavuk.avif" },
+                                { isim: "Thai Beef Salata", aciklama: "Göbek Marul-Domates – Salata- Jülyen Dana –Mantar –Mısır- Soya Sosu – Çıtır Ekmek ile Servis Edilir.", fiyat: "450 ₺", resim: "images/thai_beef.avif" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    akordiyonBaslik: "Çorbalar",
+                    altBolumler: [
+                        {
+                            baslik: "",
+                            urunler: [
+                                { isim: "Günün Çorbası", aciklama: "Servis Personelimize Danışınız!", fiyat: "200 ₺", resim: "images/corba.avif" }
+                            ]
+                        }
+                    ]
+                }
+            ],
+        };
+
+        // ==========================================
+
+        const mainCategories = document.getElementById('mainCategories');
+        const menuDetails = document.getElementById('menuDetails');
+        const dynamicContent = document.getElementById('dynamicContent');
+
+        function showCategory(categoryID) {
+            mainCategories.style.display = 'none';
+            menuDetails.style.display = 'block';
+            
+            const veri = menuVerileri[categoryID];
+            let htmlIcerik = "";
+
+            if(veri && veri.length > 0) {
+                veri.forEach(akordiyon => {
+                    htmlIcerik += `
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            ${akordiyon.akordiyonBaslik} <span><i class="fas fa-plus"></i></span>
+                        </div>
+                        <div class="accordion-wrapper">
+                            <div class="accordion-inner">
+                    `;
+
+                    akordiyon.altBolumler.forEach(bolum => {
+                        
+                        if(bolum.baslik !== "") {
+                            htmlIcerik += `
+                            <div class="sub-accordion-header" onclick="toggleAccordion(this)">
+                                ${bolum.baslik} <span><i class="fas fa-plus"></i></span>
+                            </div>
+                            <div class="sub-accordion-wrapper">
+                                <div class="sub-accordion-inner">
+                            `;
+                        }
+                        
+                        htmlIcerik += `<div class="products-grid">`;
+
+                        bolum.urunler.forEach(urun => {
+                            
+                            let resimGorsel = "";
+                            if (urun.resim && urun.resim !== "") {
+                                resimGorsel = `<img src="${urun.resim}" alt="${urun.isim}" class="product-img">`;
+                            } else {
+                                resimGorsel = `<div class="no-image-box">Görsel Yok.<br>Kendin Görmek İster Misin?</div>`;
+                            }
+
+                            htmlIcerik += `
+                            <div class="product-item">
+                                ${resimGorsel}
+                                <div class="product-info">
+                                    <div class="product-name">${urun.isim}</div>
+                                    <div class="product-desc">${urun.aciklama}</div>
+                                </div>
+                                <div class="product-price">${urun.fiyat}</div>
+                            </div>
+                            `;
+                        });
+                        
+                        htmlIcerik += `</div>`; 
+
+                        if(bolum.baslik !== "") {
+                            htmlIcerik += `
+                                </div>
+                            </div>
+                            `;
+                        }
+                    });
+
+                    htmlIcerik += `
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+                
+                dynamicContent.innerHTML = htmlIcerik;
+            } else {
+                dynamicContent.innerHTML = '<p style="text-align:center; padding: 40px; color:#aaaaaa;">Bu kategori için içerikler hazırlanıyor...</p>';
+            }
+        }
+
+        function goBack() {
+            menuDetails.style.display = 'none';
+            mainCategories.style.display = 'grid';
+            dynamicContent.innerHTML = '';
+        }
+
+        function toggleAccordion(element) {
+            const wrapper = element.nextElementSibling; 
+            const icon = element.querySelector('span i');
+            const isOpen = wrapper.classList.contains('open');
+            
+            if (element.classList.contains('accordion-header')) {
+                document.querySelectorAll('.accordion-wrapper').forEach(w => w.classList.remove('open'));
+                document.querySelectorAll('.accordion-header span i').forEach(i => i.className = 'fas fa-plus');
+            } 
+            else if (element.classList.contains('sub-accordion-header')) {
+                const parentInner = element.closest('.accordion-inner');
+                if(parentInner) {
+                    parentInner.querySelectorAll('.sub-accordion-wrapper').forEach(w => w.classList.remove('open'));
+                    parentInner.querySelectorAll('.sub-accordion-header span i').forEach(i => i.className = 'fas fa-plus');
+                }
+            }
+
+            if (!isOpen) {
+                wrapper.classList.add('open');
+                if (icon) icon.className = 'fas fa-minus';
+            }
+        }
+    </script>
+</body>
+</html>
