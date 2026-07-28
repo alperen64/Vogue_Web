@@ -831,7 +831,7 @@
                             
                             let resimGorsel = "";
                             if (urun.resim && urun.resim !== "") {
-                                resimGorsel = `<img src="${urun.resim}" alt="${urun.isim}" class="product-img">`;
+                                resimGorsel = `<img src="${urun.resim}" alt="${urun.isim}" class="product-img" loading="lazy" decoding="async">`;
                             } else {
                                 resimGorsel = `<div class="no-image-box">Görsel Yok.<br>Kendin Görmek İster Misin?</div>`;
                             }
